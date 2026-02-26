@@ -57,10 +57,15 @@ export function ClientJobDetail() {
   const handleAccept = async () => {
     if (!selectedProposal) return
     setIsAccepting(true)
-    console.log("Starting handleAccept:", { job, selectedProposal })
+    console.log("Starting handleAccept:", { job, selectedProposal, currentAddress: address })
     try {
       const fAddr = selectedProposal.freelancerAddress || selectedProposal.freelancer_address
       if (!fAddr) throw new Error("Freelancer address missing in proposal")
+
+      // Logic Check: is current user the client?
+      if (job.client.toLowerCase() !== address?.toLowerCase()) {
+        throw new Error(`Only the job client (${shortenAddress(job.client)}) can accept proposals. You are connected as ${shortenAddress(address || '')}.`)
+      }
 
       if (fAddr.toLowerCase() === address?.toLowerCase()) {
         throw new Error("You cannot hire yourself. Contract rules forbid it.")
@@ -77,8 +82,8 @@ export function ClientJobDetail() {
       fetchJob()
     } catch (e: any) {
       console.error('Accept proposal error details:', e)
-      const msg = e.reason || e.message || JSON.stringify(e)
-      toast.error(`Failed to accept: ${msg}`)
+      const msg = e.reason || e.message || (typeof e === 'string' ? e : 'Unknown error')
+      toast.error(`Error: ${msg}`)
     } finally {
       setIsAccepting(false)
     }
