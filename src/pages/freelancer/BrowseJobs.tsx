@@ -18,7 +18,7 @@ export function BrowseJobs() {
       try {
         const all = await getAllJobs()
         if (mounted) {
-          let openJobs = all.filter((j: any) => j.status === 'open')
+          let openJobs = all.filter((j: any) => j.status === 'open' || j.status === 'funded')
 
           // AI Match Scoring
           if (profile?.aiSkills && profile.aiSkills.length > 0) {
