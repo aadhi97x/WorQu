@@ -1,0 +1,9 @@
+[
+  "function mintAgreement(address client, address freelancer, uint256 jobId, uint256 amount, string tokenURI) external returns (uint256)",
+  "function updateStatus(uint256 jobId, string newStatus) external",
+  "function getAgreement(uint256 tokenId) external view returns (tuple(address client, address freelancer, uint256 jobId, uint256 amount, string status, uint256 createdAt))",
+  "function tokenIds() external view returns (uint256)",
+  "function ownerOf(uint256 tokenId) external view returns (address)",
+  "event AgreementMinted(uint256 indexed tokenId, uint256 indexed jobId, address indexed client, address indexed freelancer)",
+  "event AgreementStatusUpdated(uint256 indexed tokenId, string newStatus)"
+]

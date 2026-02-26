@@ -1,0 +1,15 @@
+[
+  "function postJob(string title, string description, string category, uint256 deadline) external payable returns (uint256)",
+  "function acceptProposal(uint256 jobId, address freelancer, string tokenURI) external",
+  "function releasePayment(uint256 jobId) external",
+  "function raiseDispute(uint256 jobId) external",
+  "function refund(uint256 jobId) external",
+  "function getJob(uint256 jobId) external view returns (tuple(uint256 id, address client, address freelancer, string title, string description, uint256 budget, uint256 deadline, uint8 status, uint256 createdAt, string category))",
+  "function getAllJobs() external view returns (tuple(uint256 id, address client, address freelancer, string title, string description, uint256 budget, uint256 deadline, uint8 status, uint256 createdAt, string category)[])",
+  "event JobPosted(uint256 indexed jobId, address indexed client, uint256 budget, string title)",
+  "event ProposalAccepted(uint256 indexed jobId, address indexed freelancer)",
+  "event PaymentReleased(uint256 indexed jobId, address indexed freelancer, uint256 amount)",
+  "event JobRefunded(uint256 indexed jobId, address indexed client, uint256 amount)",
+  "event DisputeRaised(uint256 indexed jobId)",
+  "function markJobDelivered(uint256 jobId) external"
+]

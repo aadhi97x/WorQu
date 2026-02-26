@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Quai Contracts</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            padding: 40px;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-size: 13px;
+            color: #10b981;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #22c55e;
+        }
+
+        .step {
+            margin-bottom: 24px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Deploy Quai Contracts</h1>
+        <p>Deploy the JobEscrow and WorkAgreementNFT contracts directly using your Pelagus wallet.</p>
+
+        <div class="step">
+            <h3>Step 1: Connect Wallet</h3>
+            <button id="connectBtn">Connect Pelagus</button>
+            <div id="walletStatus" style="font-family: monospace; color: #94a3b8; font-size: 14px; margin-top: 8px;">Not
+                connected</div>
+        </div>
+
+        <div class="step" style="border-bottom: none;">
+            <h3>Step 2: Deploy Contracts</h3>
+            <p style="font-size: 14px; color: #94a3b8;">This will ask you to approve 2 separate transactions.</p>
+            <button id="deployBtn" disabled>Deploy Contracts</button>
+        </div>
+
+        <pre id="output">Output log...\n</pre>
+    </div>
+
+    <!-- Import Quais from a local UMD build -->
+    <script src="/js/quais.umd.js"></script>
+    <script>
+        // No need to import, quais is available on window
+        const { quais } = window;
+
+        const connectBtn = document.getElementById('connectBtn');
+        const deployBtn = document.getElementById('deployBtn');
+        const output = document.getElementById('output');
+        const walletStatus = document.getElementById('walletStatus');
+
+        let provider, signer, nftArtifact, escrowArtifact;
+
+        function log(msg) {
+            output.textContent += msg + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+
+        connectBtn.onclick = async () => {
+            if (typeof window.pelagus === 'undefined') {
+                log('❌ Error: Pelagus wallet extension not found!');
+                return;
+            }
+            try {
+                await window.pelagus.request({ method: 'quai_requestAccounts' });
+                provider = new quais.BrowserProvider(window.pelagus);
+                signer = await provider.getSigner();
+                const address = await signer.getAddress();
+
+                walletStatus.textContent = 'Connected: ' + address;
+                walletStatus.style.color = '#22c55e';
+                deployBtn.disabled = false;
+                connectBtn.disabled = true;
+                connectBtn.textContent = 'Connected';
+
+                log('✅ Connected to Pelagus: ' + address);
+            } catch (e) {
+                log('❌ Connection error: ' + e.message);
+            }
+        };
+
+        deployBtn.onclick = async () => {
+            if (!signer) return;
+            deployBtn.disabled = true;
+
+            try {
+                log('📥 Fetching compiled contract artifacts...');
+                nftArtifact = await fetch('/artifacts/WorkAgreementNFT.json').then(r => r.json());
+                escrowArtifact = await fetch('/artifacts/JobEscrow.json').then(r => r.json());
+
+                log('🚀 Deploying WorkAgreementNFT...');
+                const nftFactory = new quais.ContractFactory(nftArtifact.abi, nftArtifact.bytecode, signer);
+                const nft = await nftFactory.deploy(await signer.getAddress()); // Fix: WorkAgreementNFT needs initialOwner in constructor
+                log('⏳ Waiting for NFT deployment confirmation...');
+                await nft.waitForDeployment();
+                const nftAddress = await nft.getAddress();
+                log('✅ NFT Deployed at: ' + nftAddress);
+
+                log('\n🚀 Deploying JobEscrow...');
+                const escrowFactory = new quais.ContractFactory(escrowArtifact.abi, escrowArtifact.bytecode, signer);
+                const escrow = await escrowFactory.deploy(nftAddress);
+                log('⏳ Waiting for Escrow deployment confirmation...');
+                await escrow.waitForDeployment();
+                const escrowAddress = await escrow.getAddress();
+                log('✅ Escrow Deployed at: ' + escrowAddress);
+
+                log('\n🎉 SUCCESS! Copy these lines and replace them in your .env file:');
+                log('================================================================');
+                log('VITE_NFT_ADDRESS="' + nftAddress + '"');
+                log('VITE_JOB_ESCROW_ADDRESS="' + escrowAddress + '"');
+                log('================================================================');
+                log('\nAfter saving .env, restart your dev server!');
+            } catch (e) {
+                log('\n❌ Deployment failed: ' + e.message);
+                deployBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+
+</html>

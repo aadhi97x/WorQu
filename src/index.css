@@ -1,0 +1,691 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+  --text-hero: clamp(52px, 10vw, 110px);
+
+  /* Pure black backgrounds */
+  --bg-base: #030303;
+  --bg-surface: #080808;
+  --bg-elevated: #0e0e0e;
+  --bg-card: rgba(10, 10, 10, 0.4);
+  --bg-overlay: rgba(3, 3, 3, 0.85);
+
+  /* Glass surfaces - increased opacity for better visibility against dynamic backgrounds */
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-hover: rgba(78, 255, 160, 0.2);
+
+  /* Borders */
+  --border-default: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(78, 255, 160, 0.18);
+
+  /* Green accent */
+  --quai-green: #4EFFA0;
+  --quai-green-dim: rgba(78, 255, 160, 0.15);
+  --quai-green-10: rgba(78, 255, 160, 0.06);
+  --quai-green-15: rgba(78, 255, 160, 0.10);
+  --quai-green-20: rgba(78, 255, 160, 0.15);
+  --quai-green-30: rgba(78, 255, 160, 0.22);
+
+  /* Text — using solid colors for reliability/readability */
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d4;
+  --text-muted: #8a8a8a;
+  --text-inverse: #030303;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.8);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* Green glows */
+  --glow-green-xs: 0 0 8px rgba(78, 255, 160, 0.15);
+  --glow-green-sm: 0 0 20px rgba(78, 255, 160, 0.12);
+  --glow-green-md: 0 0 50px rgba(78, 255, 160, 0.09);
+  --glow-green-lg: 0 0 100px rgba(78, 255, 160, 0.06);
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  --spacing-4xl: 64px;
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+/* ══════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   Applied when <html data-theme="light">
+══════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-base: #f0f2f0;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f6f8f6;
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(240, 242, 240, 0.92);
+
+  --glass-bg: rgba(255, 255, 255, 0.2);
+  /* More transparent */
+  --glass-bg-hover: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-hover: rgba(78, 200, 130, 0.35);
+
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border-strong: rgba(0, 0, 0, 0.14);
+  --border-glow: rgba(32, 160, 90, 0.25);
+
+  --quai-green: #1a9f60;
+  --quai-green-dim: rgba(26, 159, 96, 0.2);
+  --quai-green-10: rgba(26, 159, 96, 0.07);
+  --quai-green-15: rgba(26, 159, 96, 0.12);
+  --quai-green-20: rgba(26, 159, 96, 0.18);
+  --quai-green-30: rgba(26, 159, 96, 0.28);
+
+  --text-primary: #0d1a12;
+  --text-secondary: rgba(13, 26, 18, 0.55);
+  --text-muted: rgba(13, 26, 18, 0.35);
+  --text-inverse: #ffffff;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.10);
+  --shadow-glass: 0 4px 24px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  --glow-green-xs: 0 0 8px rgba(26, 159, 96, 0.18);
+  --glow-green-sm: 0 0 20px rgba(26, 159, 96, 0.14);
+  --glow-green-md: 0 0 50px rgba(26, 159, 96, 0.10);
+  --glow-green-lg: 0 0 100px rgba(26, 159, 96, 0.07);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smooth theme transitions */
+html {
+  background: var(--bg-base);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  background: transparent;
+  /* let the fixed MeshGradient canvas show through */
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: color 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────
+   LIQUID GLASS — 21st.dev SVG filter utility
+───────────────────────────────────────────── */
+.liquid-glass {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  backdrop-filter: blur(4px);
+  filter: url(#glass-distortion);
+  isolation: isolate;
+  border-radius: inherit;
+}
+
+.liquid-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow:
+    inset 2px 2px 1px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.liquid-glass>* {
+  position: relative;
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════════
+   GLASS CARD — liquid glass from 21st.dev
+═══════════════════════════════════════════ */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+}
+
+/* Liquid glass distortion layer */
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  filter: url(#glass-distortion);
+  isolation: isolate;
+  pointer-events: none;
+}
+
+/* Inner highlight/shimmer */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.18),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-glass), var(--glow-green-sm);
+}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--quai-green);
+  color: var(--text-inverse);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: 0 0 24px rgba(78, 255, 160, 0.25);
+}
+
+.btn-primary:hover {
+  background: #6fffb4;
+  transform: translateY(-1px);
+  box-shadow: 0 0 40px rgba(78, 255, 160, 0.4);
+}
+
+.btn-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  isolation: isolate;
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.12), inset -1px -1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  filter: url(#glass-distortion);
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.btn-secondary:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-1px);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.18), var(--glow-green-xs);
+}
+
+/* ═══════════════════════════════════════════
+   SECTION LAYOUT
+═══════════════════════════════════════════ */
+.section-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a4ffcf;
+  margin-bottom: 20px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--quai-green);
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════
+   OVERLINE CHIP
+═══════════════════════════════════════════ */
+.overline-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: var(--quai-green-10);
+  border: 1px solid var(--quai-green-dim);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a4ffcf;
+}
+
+/* ═══════════════════════════════════════════
+   INPUTS
+═══════════════════════════════════════════ */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: all var(--transition-base);
+  outline: none;
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.1), inset -1px -1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--quai-green);
+  background: var(--glass-bg-hover);
+  box-shadow: 0 0 0 3px var(--quai-green-10), inset 1px 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* ═══════════════════════════════════════════
+   GRADIENT TEXT
+═══════════════════════════════════════════ */
+.gradient-text {
+  background: linear-gradient(135deg, var(--quai-green) 0%, #2EE8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION DIVIDER LINE
+═══════════════════════════════════════════ */
+.section-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) translateX(-50%);
+  }
+
+  50% {
+    transform: translateY(-8px) translateX(-50%);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   WORQU HERO LOGO
+   Sharp, bold, high-visibility white logo
+═══════════════════════════════════════════ */
+.worqu-hero-logo {
+  position: absolute;
+  top: 6%;
+  /* Nudged even higher into corner */
+  right: 5%;
+  font-size: clamp(28px, 4vw, 56px);
+  /* Slightly smaller for corner fit */
+  font-weight: 900;
+  color: #ffffff;
+  opacity: 1;
+  /* Full visibility */
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -0.05em;
+  font-family: var(--font-body);
+  /* Sharp branding effect */
+  text-shadow:
+    0 0 20px rgba(78, 255, 160, 0.4),
+    0 0 40px rgba(78, 255, 160, 0.2);
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+  animation: worqu-logo-float 8s ease-in-out infinite;
+  z-index: 2;
+  /* Sits behind content (z-3) but above ambient background (z-1) */
+}
+
+@keyframes worqu-logo-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(-0.5deg);
+  }
+
+  50% {
+    transform: translateY(-10px) scale(1.02) rotate(0.5deg);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   NAVBAR — Opaque & Premium
+───────────────────────────────────────────── */
+.navbar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-4xl);
+  height: 72px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo .accent {
+  color: #a4ffcf;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: var(--spacing-2xl);
+  margin-left: var(--spacing-4xl);
+  align-items: center;
+}
+
+.navbar-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+}
+
+.navbar-nav a:hover {
+  color: var(--text-primary);
+  background: var(--glass-bg);
+}
+
+.navbar-nav a.active {
+  color: #a4ffcf;
+  background: var(--quai-green-10);
+}
+
+.navbar-spacer {
+  flex-grow: 1;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--quai-green-dim);
+}
+
+/* Selection */
+::selection {
+  background: rgba(78, 255, 160, 0.2);
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════
+   REACT DATEPICKER OVERRIDES
+═══════════════════════════════════════════ */
+.react-datepicker {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-body) !important;
+  box-shadow: var(--shadow-glass) !important;
+  color: var(--text-primary) !important;
+}
+
+.react-datepicker__header {
+  background: var(--bg-elevated) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  border-top-left-radius: var(--radius-md) !important;
+  border-top-right-radius: var(--radius-md) !important;
+  padding-top: 12px !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__day-name {
+  color: var(--text-secondary) !important;
+}
+
+.react-datepicker__day {
+  color: var(--text-primary) !important;
+  transition: all var(--transition-fast) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.react-datepicker__day:hover {
+  background: var(--quai-green-10) !important;
+  color: var(--quai-green) !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: var(--quai-green) !important;
+  color: var(--bg-base) !important;
+  font-weight: 700 !important;
+}
+
+.react-datepicker__day--disabled {
+  color: var(--text-muted) !important;
+}
+
+.react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
+  border-bottom-color: var(--bg-surface) !important;
+}
+
+.react-datepicker-popper[data-placement^=top] .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^=top] .react-datepicker__triangle::after {
+  border-top-color: var(--bg-surface) !important;
+}
+
+.react-datepicker__triangle::before {
+  border-bottom-color: var(--border-strong) !important;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: var(--text-secondary) !important;
+  transition: border-color var(--transition-fast) !important;
+}
+
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: var(--text-primary) !important;
+}
