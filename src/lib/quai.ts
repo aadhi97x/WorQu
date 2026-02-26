@@ -2,8 +2,10 @@ import { quais } from 'quais'
 
 export const RPC_URL = import.meta.env.VITE_RPC_URL || 'https://orchard.rpc.quai.network'
 export const EXPLORER_URL = import.meta.env.VITE_EXPLORER_URL || 'https://orchard.quaiscan.io'
-export const ESCROW_ADDR = import.meta.env.VITE_JOB_ESCROW_ADDRESS || '0x0000000000000000000000000000000000000000'
-export const NFT_ADDR = import.meta.env.VITE_NFT_ADDRESS || '0x0000000000000000000000000000000000000000'
+const cleanAddr = (addr: string | undefined) => addr?.replace(/['"]/g, '').trim();
+
+export const ESCROW_ADDR = cleanAddr(import.meta.env.VITE_JOB_ESCROW_ADDRESS) || '0x0000000000000000000000000000000000000000'
+export const NFT_ADDR = cleanAddr(import.meta.env.VITE_NFT_ADDRESS) || '0x0000000000000000000000000000000000000000'
 
 export const getRpcProvider = () =>
   new quais.JsonRpcProvider(RPC_URL)
